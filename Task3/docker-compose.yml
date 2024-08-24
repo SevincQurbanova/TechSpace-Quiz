@@ -4,6 +4,7 @@ services:
         image: mysql
         environment:
             MYSQL_ROOT_PASSWORD: '12345'
+            MYSQL_DATABASE: 'moviedb'
         ports:
             - 3307:3306  # Changed the host port to 3307 to avoid conflicts
         volumes:
@@ -12,5 +13,16 @@ services:
         image: adminer
         ports:
             - 8080:8080
+    web:
+        build: .
+        ports:
+            - "5000:5000"
+        depends_on:
+            - db
+        environment:
+            FLASK_APP: app.py
+            FLASK_RUN_HOST: 0.0.0.0
+            FLASK_ENV: development
+        command: flask run --host=0.0.0.0
 volumes:
     mysql_data: {}
